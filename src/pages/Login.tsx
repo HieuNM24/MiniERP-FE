@@ -3,6 +3,7 @@ import { Card, Form, Input, Button, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi';
+import { useAuth } from '../contexts/AuthContext';
 import type { LoginRequest } from '../types/auth';
 
 const { Title } = Typography;
@@ -10,20 +11,14 @@ const { Title } = Typography;
 export const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const onFinish = async (values: LoginRequest) => {
     setLoading(true);
     try {
       const data = await authApi.login(values);
-      
-      // 1. Lưu JWT Token vào localStorage
-      localStorage.setItem('token', data.token);
-      if (data.username) localStorage.setItem('username', data.username);
-      if (data.roleName) localStorage.setItem('roleName', data.roleName);
-
+      auth.login(data.token, data.username, data.roleName);
       message.success('Đăng nhập thành công!');
-      
-      // 2. Chuyển hướng sang trang Dashboard
       navigate('/dashboard');
     } catch (error: any) {
       const errorMsg = error.response?.data?.message || 'Đăng nhập thất bại, vui lòng kiểm tra lại!';
@@ -39,7 +34,7 @@ export const Login: React.FC = () => {
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
-      backgroundColor: '#f0f2f5'
+      backgroundColor: '#f0f2f5',
     }}>
       <Card style={{ width: 400, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
         <div style={{ textAlign: 'center', marginBottom: 24 }}>

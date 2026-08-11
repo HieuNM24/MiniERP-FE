@@ -1,16 +1,26 @@
+// Matches BackEnd ProductDto — note sKU capitalization matches JSON from .NET
 export interface Product {
-  id: number;
-  sku: string;
+  productId: number;
+  sKU: string;
   productName: string;
   unitPrice: number;
   stockQuantity: number;
-  categoryId?: number;
+  categoryId: number;
+  categoryName: string;
+  isLowStock: boolean;
 }
 
 export interface CreateProductDto {
-  sku: string;
+  sKU: string;
   productName: string;
   unitPrice: number;
   stockQuantity: number;
+  categoryId: number;
+}
+
+export interface UpdateProductDto extends Partial<CreateProductDto> {}
+
+export interface ProductQueryParams {
+  search?: string;
   categoryId?: number;
 }

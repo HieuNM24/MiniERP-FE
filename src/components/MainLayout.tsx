@@ -4,33 +4,44 @@ import {
   DashboardOutlined,
   UserOutlined,
   ShoppingOutlined,
+  AppstoreOutlined,
+  OrderedListOutlined,
+  AuditOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
+
+const buildMenuItems = (roleName: string | null) => {
+  const base = [
+    { key: '/dashboard',   icon: <DashboardOutlined />,     label: 'Dashboard' },
+    { key: '/products',    icon: <ShoppingOutlined />,      label: 'Sản phẩm' },
+    { key: '/categories',  icon: <AppstoreOutlined />,      label: 'Danh mục' },
+    { key: '/orders',      icon: <OrderedListOutlined />,   label: 'Đơn hàng' },
+  ];
+  if (roleName === 'Admin') {
+    base.push({ key: '/audit-log', icon: <AuditOutlined />, label: 'Audit Log' });
+  }
+  return base;
+};
 
 export const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const username = localStorage.getItem('username') || 'User';
-  const roleName = localStorage.getItem('role') || 'Nhân viên';
+  const auth = useAuth();
 
   const handleLogout = () => {
-    localStorage.clear();
+    auth.logout();
     navigate('/login');
   };
 
-  const menuItems = [
-    { key: '/dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
-    { key: '/products', icon: <ShoppingOutlined />, label: 'Quản lý Sản phẩm' },
-    { key: '/users', icon: <UserOutlined />, label: 'Quản lý Người dùng' },
-  ];
+  const menuItems = buildMenuItems(auth.roleName);
 
   const userMenuItems = [
     {
@@ -69,8 +80,8 @@ export const MainLayout: React.FC = () => {
             <Space style={{ cursor: 'pointer' }}>
               <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#1890ff' }} />
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
-                <Text >{username}</Text>
-                <Text type="secondary" style={{ fontSize: 12 }}>{roleName}</Text>
+                <Text>{auth.username || 'User'}</Text>
+                <Text type="secondary" style={{ fontSize: 12 }}>{auth.roleName || ''}</Text>
               </div>
             </Space>
           </Dropdown>
