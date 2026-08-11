@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // ⚠️ LƯU Ý: Kiểm tra lại Port ở Backend .NET của bạn và thay vào đây (Ví dụ: 7123, 5000, 5178...)
-const BASE_URL = 'https://localhost:7123/api'; 
+const BASE_URL = 'https://localhost:7143/api'; 
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
