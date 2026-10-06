@@ -77,7 +77,6 @@ export const Products: React.FC = () => {
         sKU: product.sKU,
         productName: product.productName,
         unitPrice: product.unitPrice,
-        stockQuantity: product.stockQuantity,
         categoryId: product.categoryId,
       });
     } else {
@@ -228,9 +227,6 @@ export const Products: React.FC = () => {
           </Form.Item>
           <Form.Item name="unitPrice" label="Đơn Giá (VNĐ)" rules={[{ required: true, message: 'Nhập đơn giá!' }]}>
             <InputNumber style={{ width: '100%' }} min={0} placeholder="15000000" />
-          </Form.Item>
-          <Form.Item name="stockQuantity" label="Số Lượng Tồn Kho" rules={[{ required: true, message: 'Nhập số lượng!' }]}>
-            <InputNumber style={{ width: '100%' }} min={0} placeholder="10" />
           </Form.Item>
           <Form.Item name="categoryId" label="Danh Mục" rules={[{ required: true, message: 'Chọn danh mục!' }]}>
             <Select placeholder="Chọn danh mục">
